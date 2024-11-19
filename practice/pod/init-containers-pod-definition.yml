@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webserver-pod
+spec:
+  # Define the init container
+  initContainers:
+  - name: download-config
+    image: busybox
+    command:
+      - /bin/sh
+      - "-c"
+      - |
+        echo "Downloading config file..."
+        # Simulate downloading a config file
+        echo "server_config=1234" > /config/server-config.txt
+        echo "Config download complete."
+        exit 0
+    volumeMounts:
+      - name: config-volume
+        mountPath: /config
+
+  # Define the main container
+  containers:
+  - name: web-server
+    image: nginx
+    volumeMounts:
+      - name: config-volume
+        mountPath: /usr/share/nginx/html/config
+    ports:
+      - containerPort: 80
+
+  # Define a shared volume
+  volumes:
+  - name: config-volume
+    emptyDir: {}
