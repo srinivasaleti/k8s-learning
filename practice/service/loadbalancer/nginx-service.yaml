@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-service-nginx
+spec:
+  selector:
+    app: loadbalancer-service-nginx-app
+  ports:
+    - protocol: TCP
+      port: 80  # Port exposed by the service
+      targetPort: 80  # Port on the Pods to route traffic to
+  type: LoadBalancer  # Type of service to provision an external load balancer
